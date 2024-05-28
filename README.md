@@ -12,7 +12,7 @@ strategic locations.
 
 ```
 Slider2DView(
-    canvasColor: Color = .blue,
+    canvasColor: Color = .green,
     cornerRadius: CGFloat = 15,
     handleColor: Color = .purple,
     size: CGSize = CGSize(width: 400, height: 400),
