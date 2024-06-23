@@ -36,16 +36,40 @@ struct Magnets {
 }
 
 struct Slider2DView: View {
-    let canvasColor: Color = .blue
-    let cornerRadius: CGFloat = 15
-    let handleColor: Color = .purple
-    let size: CGSize = CGSize(width: 400, height: 400)
-    let snapTolerance: CGFloat = 20
+    let canvasColor: Color
+    let cornerRadius: CGFloat
+    let handleColor: Color
+    let scale: CGVector
+    let size: CGSize
+    let snapTolerance: CGFloat
     let title: String
 
     @State private var dotAlpha: CGFloat = 1
     @State private var dotOffset: CGPoint = .zero
     @State private var dotPosition: CGPoint = .zero
+
+    init(
+        canvasColor: Color = .blue,
+        cornerRadius: CGFloat = 15,
+        handleColor: Color = .purple,
+        size: CGSize = CGSize(width: 400, height: 400),
+        snapTolerance: CGFloat = 20,
+        title: String,
+        virtualSize: CGSize? = nil
+    ) {
+        self.canvasColor = canvasColor
+        self.cornerRadius = cornerRadius
+        self.handleColor = handleColor
+        self.size = size
+        self.snapTolerance = snapTolerance
+        self.title = title
+
+        if let vs = virtualSize {
+            scale = CGVector(dx: vs.width / size.width, dy: vs.height / size.height)
+        } else {
+            scale = CGVector(dx: 1, dy: 1)
+        }
+    }
 
     func dragChange(_ gesture: DragGesture.Value, sticky: Bool = true) {
         let gOffset = CGPoint(
@@ -90,6 +114,11 @@ struct Slider2DView: View {
         }
 
         dotAlpha = 1
+    }
+
+    var scaledOutput: CGPoint {
+        let p = dotOffset + dotPosition
+        return CGPoint(x: p.x * scale.dx, y: p.y * scale.dy)
     }
 
     var body: some View {
@@ -137,7 +166,7 @@ struct Slider2DView: View {
                     )
             }
 
-            Text("\(CGPoint(x: dotOffset.x + dotPosition.x, y: -(dotOffset.y + dotPosition.y)))")
+            Text("\(scaledOutput)")
         }
     }
 }

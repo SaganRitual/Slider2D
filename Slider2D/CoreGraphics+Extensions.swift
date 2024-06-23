@@ -37,6 +37,12 @@ extension CGPoint {
     }
 }
 
+extension CGPoint: CustomStringConvertible {
+    public var description: String {
+        String(format: "(%.2f, %.2f)", x, y)
+    }
+}
+
 extension CGSize {
     static func + (_ lhs: CGSize, _ rhs: CGSize) -> CGSize {
         CGSize(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
